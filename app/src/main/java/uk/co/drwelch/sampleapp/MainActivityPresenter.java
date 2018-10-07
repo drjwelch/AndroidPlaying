@@ -1,5 +1,7 @@
 package uk.co.drwelch.sampleapp;
 
+import java.util.ArrayList;
+
 public class MainActivityPresenter {
 
     private Model model;
@@ -14,8 +16,9 @@ public class MainActivityPresenter {
         model.refreshData(view.getEntryValue());
     }
 
-    public void refreshedData(String message) {
-        view.setInputLabel(message);
+    public void refreshedData(ArrayList<String> message) {
+        view.setNameLabel(message.get(0));
+        view.setMassLabel(message.get(1));
     }
 
     public View getView() {
@@ -23,7 +26,8 @@ public class MainActivityPresenter {
     }
 
     public interface View {
-        void setInputLabel(String msg);
+        void setNameLabel(String msg);
+        void setMassLabel(String msg);
         String getEntryValue();
     }
 }

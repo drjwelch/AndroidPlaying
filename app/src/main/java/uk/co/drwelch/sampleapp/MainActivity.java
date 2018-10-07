@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
     }
 
     public String getEntryValue() {
-        TextView myInput = (TextView) findViewById(R.id.editText);
+        TextView myInput = findViewById(R.id.editText);
         return myInput.getText().toString();
     }
 
@@ -26,8 +26,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
         presenter.fetchClicked();
     }
 
-    public void setInputLabel(String msg) {
-        TextView mylabel = (TextView) findViewById(R.id.textView2);
+    public void setNameLabel(String msg) {
+        TextView mylabel = findViewById(R.id.nameTextView);
+        mylabel.setText(msg);
+    }
+
+    public void setMassLabel(String msg) {
+        TextView mylabel = findViewById(R.id.massTextView);
         mylabel.setText(msg);
     }
 }
