@@ -1,7 +1,5 @@
 package uk.co.drwelch.sampleapp;
 
-import android.view.View;
-
 public class MainActivityPresenter {
 
     private Model model;
@@ -25,7 +23,7 @@ public class MainActivityPresenter {
     }
 
     public interface View {
-        public void setInputLabel(String msg);
-        public String getEntryValue();
+        void setInputLabel(String msg);
+        String getEntryValue();
     }
 }

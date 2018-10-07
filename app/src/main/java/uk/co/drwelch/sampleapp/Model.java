@@ -10,56 +10,53 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 public class Model {
 
     private String message;
     private MainActivityPresenter myPresenter;
+    private Repository myRepo;
 
     public Model(MainActivityPresenter presenter) {
-
-        this.message = "Donkey";
-        this.myPresenter = presenter;
+        message = "Error";
+        myPresenter = presenter;
+        myRepo = Repository.getInstance();
     }
 
-    public void refreshData(String userData) {
+    public void refreshData(String command) {
 
-//        Response response = null;
-//        String jsonData = "{\"Name\":\"Plonkey\"}";
-
-        String url = "https://swapi.co/api/people/"+userData;
-        OkHttpClient client = new OkHttpClient();   // singleton better?
-         Request request = new Request.Builder()
-            .url(url)
-            .build();
-         client.newCall(request)
-              .enqueue(new Callback() {
+        Callback myCallback = new Callback() {
+            @Override
+            public void onFailure(final Call call, IOException e) {
+                call.cancel();
+            }
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                // Extract results
+                parseResponse(response.body().string());
+                // Post event to 'windowmainloop'
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
-                    public void onFailure(final Call call, IOException e) {
-                            call.cancel();
-                        }
-                    @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
-                        String jsonData = response.body().string();
-                        try {
-                            JSONObject Jobject = new JSONObject(jsonData);
-                            Model.this.message = Jobject.getString("name");
-                        } catch (JSONException e) {
-                            if (e.getMessage().contains("No value for name")) {
-                                Model.this.message = "Too big";
-                            }
-                            e.printStackTrace();
-                        }
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                myPresenter.refreshedData(Model.this.message);
-                            }
-                        });
+                    public void run() {
+                        myPresenter.refreshedData(Model.this.message);
                     }
-              });
+                });
+            }
+        };
+        myRepo.fetch(command, myCallback);
     }
+
+    private void parseResponse(String data) {
+        try {
+            JSONObject Jobject = new JSONObject(data);
+            message = Jobject.getString("name");
+        } catch (JSONException e) {
+            if (e.getMessage().contains("No value for name")) {
+                message = "Too big";
+            }
+            e.printStackTrace();
+        }
+    }
+
 }
