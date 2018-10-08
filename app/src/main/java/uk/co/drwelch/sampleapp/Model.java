@@ -6,18 +6,13 @@ import android.os.Looper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 public class Model implements Repository.RepoListener {
 
-    private ArrayList<String> message;
+    private Person message;
     private MainActivityPresenter myPresenter;
     private Repository myRepo;
 
     public Model(MainActivityPresenter presenter) {
-        message = new ArrayList<>();
-        message.add("Error");
-        message.add("0 kg");
         myPresenter = presenter;
         myRepo = Repository.getInstance();
     }
@@ -33,13 +28,13 @@ public class Model implements Repository.RepoListener {
     }
 
     public void onSuccess(String data) {
-        // Extract results
+        // Cache and extract results
         parseResponse(data);
         // Post event to 'windowmainloop'
         new Handler(Looper.getMainLooper()).post(new Runnable() {
              @Override
              public void run() {
-                 myPresenter.refreshedData(Model.this.message);
+                 myPresenter.showData(Model.this.message);
              }
         });
     }
@@ -47,16 +42,17 @@ public class Model implements Repository.RepoListener {
     private void parseResponse(String data) {
         try {
             JSONObject Jobject = new JSONObject(data);
-            String message0 = Jobject.getString("name");
-            String message1 = Jobject.getString("mass");
-            message.clear();
-            message.add(message0);
-            message.add(message1+" kg");
+
+            // responses not guaranteed to be those types so store as strings
+            // handle conversion in presenter - it's business logic
+
+            message = new Person(Jobject.getString("name"),
+                    Jobject.getString("height"),
+                    Jobject.getString("mass"),
+                    Jobject.getString("created"));
         } catch (JSONException e) {
             if (e.getMessage().contains("No value for name")) {
-                message.clear();
-                message.add("Not found");
-                message.add("N/A");
+                message = new Person("Not found", "", "","");
             }
             e.printStackTrace();
         }

@@ -1,7 +1,5 @@
 package uk.co.drwelch.sampleapp;
 
-import java.util.ArrayList;
-
 public class MainActivityPresenter {
 
     private Model model;
@@ -13,12 +11,43 @@ public class MainActivityPresenter {
     }
 
     public void fetchClicked() {
-        model.refreshData(view.getEntryValue());
+        String value = view.getEntryValue();
+        if (!value.isEmpty()) {
+            model.refreshData(value);
+        } else {
+            // error feedback on screen
+        }
     }
 
-    public void refreshedData(ArrayList<String> message) {
-        view.setNameLabel(message.get(0));
-        view.setMassLabel(message.get(1));
+    public void showData(Person person) {
+        view.setNameLabel(person.getName());
+
+        String mass = person.getMassAsString();
+        try {
+            int mass_kg = Integer.parseInt(mass);
+            mass = mass + " kg";
+        } catch (NumberFormatException e) {
+            // mass is text
+        }
+        view.setMassLabel(mass);
+
+        String height = person.getHeightAsString();
+        try {
+            float height_m = (float) Integer.parseInt(height) / 100;
+            height = Float.toString(height_m) + " m";
+        } catch (NumberFormatException  e) {
+            // height is text
+        }
+        view.setHeightLabel(height);
+
+        String date = person.getCreatedAtDate();
+        String displayDate;
+        if (date.length()<10) {
+            displayDate = "Unknown";
+        } else {
+            displayDate = date.substring(8,10) + "/" + date.substring(5,7) + "/" + date.substring(0,4);
+        }
+        view.setCreatedAtLabel(displayDate);
     }
 
     public View getView() {
@@ -28,6 +57,8 @@ public class MainActivityPresenter {
     public interface View {
         void setNameLabel(String msg);
         void setMassLabel(String msg);
+        void setHeightLabel(String msg);
+        void setCreatedAtLabel(String msg);
         String getEntryValue();
     }
 }

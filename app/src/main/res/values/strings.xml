@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">SampleApp</string>
-    <string name="textView1">Enter number:</string>
-    <string name="button1">Fetch</string>
+    <string name="textView1">Character number:</string>
+    <string name="button1">Lookup</string>
     <string name="message">Done</string>
+    <string name="nameLabelText">Name:</string>
+    <string name="massLabelText">Weight (kg):</string>
+    <string name="createdAtLabelText">Created on:</string>
+    <string name="heightLabelText">Height (m):</string>
 </resources>
