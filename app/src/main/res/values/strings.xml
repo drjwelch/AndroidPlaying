@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">SampleApp</string>
-    <string name="textView1">Character number:</string>
-    <string name="button1">Lookup</string>
+    <string name="inputPromptText">Character number:</string>
+    <string name="buttonLabel">Lookup</string>
     <string name="message">Done</string>
-    <string name="nameLabelText">Name:</string>
-    <string name="massLabelText">Weight (kg):</string>
-    <string name="createdAtLabelText">Created on:</string>
-    <string name="heightLabelText">Height (m):</string>
+    <string name="fieldLabel0Text">Name:</string>
+    <string name="fieldLabel1Text">Height (m):</string>
+    <string name="fieldLabel2Text">Weight (kg):</string>
+    <string name="fieldLabel3Text">Created on:</string>
     <string name="errorLabelText">Enter a character number</string>
 </resources>

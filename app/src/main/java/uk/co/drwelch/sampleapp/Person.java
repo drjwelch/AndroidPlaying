@@ -1,6 +1,6 @@
 package uk.co.drwelch.sampleapp;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 public class Person {
 
@@ -8,6 +8,7 @@ public class Person {
     private String height_m;
     private String mass_kg;
     private String createdAt;
+    public static final String[] PROPERTIES = {"Name:", "Height:", "Mass:", "Created:"};
 
     public Person(String name, String height_m, String mass_kg, String createdAt) {
         this.name = name;
@@ -16,8 +17,17 @@ public class Person {
         this.createdAt = createdAt;
     }
 
-    public String getMassFormatted() {
-        String result = "";
+    public ArrayList<String> getProperties() {
+        ArrayList<String> properties = new ArrayList<>();
+        properties.add(getName());
+        properties.add(getHeightFormatted());
+        properties.add(getMassFormatted());
+        properties.add(getCreatedAtFormatted());
+        return properties;
+    }
+
+    private String getMassFormatted() {
+        String result;
         try {
             int mass = Integer.parseInt(mass_kg);
             result = mass_kg + " kg";
@@ -27,23 +37,24 @@ public class Person {
         return result;
     }
 
-    public String getHeightFormatted() {
-        String result = "";
+    private String getHeightFormatted() {
+        String result;
         try {
             float height = (float) Integer.parseInt(height_m) / 100;
-            result = Float.toString(height) + " m";
+            // can't easily get locale for number format - need Context #sadface
+            result = String.format ("%.2f", height) + " m";
         } catch (NumberFormatException  e) {
             result = height_m;
         }
         return result;
     }
 
-    public String getName() {
+    private String getName() {
         return name;
     }
 
-    public String getCreatedAtFormatted() {
-        String displayDate = "";
+    private String getCreatedAtFormatted() {
+        String displayDate;
         if (createdAt.length()<10) {
             displayDate = "Unknown";
         } else {

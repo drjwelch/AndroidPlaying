@@ -2,16 +2,18 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/inputPrompt"
         android:layout_width="123dp"
         android:layout_height="@dimen/textheight"
         android:gravity="start|center_vertical"
-        android:text="@string/textView1"
+        android:text="@string/inputPromptText"
+        android:textColor="@color/colorFieldLabel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.06"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -20,7 +22,7 @@
         app:layout_constraintVertical_bias="0.049" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/inputField"
         android:layout_width="125dp"
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"
@@ -30,9 +32,10 @@
         android:ems="10"
         android:gravity="start|center_vertical"
         android:inputType="number"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView2"
+        android:textColor="@color/colorFieldValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/inputPrompt"
         app:layout_constraintEnd_toStartOf="@+id/button"
-        app:layout_constraintStart_toEndOf="@+id/textView2" />
+        app:layout_constraintStart_toEndOf="@+id/inputPrompt" />
 
     <Button
         android:id="@+id/button"
@@ -41,12 +44,14 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:onClick="fetchButtonClicked"
-        android:text="@string/button1"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editText"
+        android:text="@string/buttonLabel"
+        android:textColor="@color/colorFieldValue"
+        android:backgroundTint="#@color/colorButton"
+        app:layout_constraintBaseline_toBaselineOf="@+id/inputField"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/nameTextView"
+        android:id="@+id/field0TextView"
         android:layout_width="140dp"
         android:layout_height="@dimen/textheight"
         android:layout_marginEnd="8dp"
@@ -54,12 +59,13 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="44dp"
         android:gravity="start|center_vertical"
-        app:layout_constraintBaseline_toBaselineOf="@+id/nameLabel"
+        android:textColor="@color/colorFieldValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/field0Label"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/nameLabel" />
+        app:layout_constraintStart_toEndOf="@+id/field0Label" />
 
     <TextView
-        android:id="@+id/massTextView"
+        android:id="@+id/field2TextView"
         android:layout_width="140dp"
         android:layout_height="@dimen/textheight"
         android:layout_marginEnd="8dp"
@@ -67,12 +73,13 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="44dp"
         android:gravity="start|center_vertical"
-        app:layout_constraintBaseline_toBaselineOf="@+id/massLabel"
+        android:textColor="@color/colorFieldValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/field2Label"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/massLabel" />
+        app:layout_constraintStart_toEndOf="@+id/field2Label" />
 
     <TextView
-        android:id="@+id/createdAtTextView"
+        android:id="@+id/field3TextView"
         android:layout_width="140dp"
         android:layout_height="@dimen/doubleTextHeight"
         android:layout_marginEnd="8dp"
@@ -80,12 +87,13 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="44dp"
         android:gravity="start|center_vertical"
-        app:layout_constraintBaseline_toBaselineOf="@+id/createdAtLabel"
+        android:textColor="@color/colorFieldValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/field3Label"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/createdAtLabel" />
+        app:layout_constraintStart_toEndOf="@+id/field3Label" />
 
     <TextView
-        android:id="@+id/heightTextView"
+        android:id="@+id/field1TextView"
         android:layout_width="138dp"
         android:layout_height="@dimen/textheight"
         android:layout_marginEnd="8dp"
@@ -93,12 +101,13 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="44dp"
         android:gravity="start|center_vertical"
-        app:layout_constraintBaseline_toBaselineOf="@+id/heightLabel"
+        android:textColor="@color/colorFieldValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/field1Label"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/heightLabel" />
+        app:layout_constraintStart_toEndOf="@+id/field1Label" />
 
     <TextView
-        android:id="@+id/nameLabel"
+        android:id="@+id/field0Label"
         android:layout_width="93dp"
         android:layout_height="@dimen/textheight"
         android:layout_marginLeft="16dp"
@@ -106,36 +115,39 @@
         android:layout_marginTop="56dp"
         android:ems="10"
         android:gravity="start|center_vertical"
-        android:text="@string/nameLabelText"
+        android:text="@string/fieldLabel0Text"
+        android:textColor="@color/colorFieldLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/inputPrompt" />
 
     <TextView
-        android:id="@+id/massLabel"
+        android:id="@+id/field2Label"
         android:layout_width="92dp"
         android:layout_height="@dimen/textheight"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:gravity="start|center_vertical"
-        android:text="@string/massLabelText"
+        android:text="@string/fieldLabel2Text"
+        android:textColor="@color/colorFieldLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/heightLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/field1Label" />
 
     <TextView
-        android:id="@+id/createdAtLabel"
+        android:id="@+id/field3Label"
         android:layout_width="92dp"
         android:layout_height="@dimen/textheight"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:gravity="start|center_vertical"
-        android:text="@string/createdAtLabelText"
+        android:text="@string/fieldLabel3Text"
+        android:textColor="@color/colorFieldLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/massLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/field2Label" />
 
     <TextView
-        android:id="@+id/heightLabel"
+        android:id="@+id/field1Label"
         android:layout_width="93dp"
         android:layout_height="@dimen/textheight"
         android:layout_marginLeft="16dp"
@@ -143,9 +155,10 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:gravity="start|center_vertical"
-        android:text="@string/heightLabelText"
+        android:text="@string/fieldLabel1Text"
+        android:textColor="@color/colorFieldLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/field0Label" />
 
     <TextView
         android:id="@+id/errorLabel"
@@ -162,7 +175,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createdAtTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/field3TextView" />
 
     <ProgressBar
         android:id="@+id/spinner"

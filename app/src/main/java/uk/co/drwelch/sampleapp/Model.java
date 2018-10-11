@@ -3,11 +3,9 @@ package uk.co.drwelch.sampleapp;
 import android.os.Handler;
 import android.os.Looper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class Model implements Repository.RepoListener {
@@ -15,28 +13,34 @@ public class Model implements Repository.RepoListener {
     private Person currentPerson;
     private MainActivityPresenter myPresenter;
     private Repository myRepo;
-    private static final ArrayList<String> fieldKeys = new ArrayList<String>();
+    private static final ArrayList<String> fieldKeys = new ArrayList<>();
 
     public Model(MainActivityPresenter presenter) {
         myPresenter = presenter;
         myRepo = Repository.getInstance();
         currentPerson = new Person("Not selected", "", "","");
-        fieldKeys.add("name");
-        fieldKeys.add("height");
-        fieldKeys.add("mass");
-        fieldKeys.add("created");
     }
 
     public void refreshData(String command) {
         myRepo.fetch(command, this);
     }
 
-    public Person getCurrentPerson() {
-        return currentPerson;
+    public ArrayList<String> getFieldLabels() {
+        return new ArrayList<>(Arrays.asList(Person.PROPERTIES));
     }
 
-    public String getFieldKey(int i) {
-        return fieldKeys.get(i);
+    public ArrayList<String> getFieldsFromObject() {
+        return currentPerson.getProperties();
+    }
+
+    private void initViewUpdate() {
+        // Post event to 'windowmainloop'
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                myPresenter.updateView();
+            }
+        });
     }
 
     // Repo.Listener interface
@@ -52,44 +56,12 @@ public class Model implements Repository.RepoListener {
         } catch (InterruptedException e) {
             // do nothing?
         }
-        // Post event to 'windowmainloop'
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                myPresenter.updateView();
-            }
-        });
+        initViewUpdate();
     }
 
     public void onSuccess(String data) {
         // Cache and extract results
-        parseResponse(data);
-        // Post event to 'windowmainloop'
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-             @Override
-             public void run() {
-                 myPresenter.updateView();
-             }
-        });
+        currentPerson = myRepo.deserialise(data);
+        initViewUpdate();
     }
-
-    private void parseResponse(String data) {
-        try {
-            JSONObject Jobject = new JSONObject(data);
-
-            // responses not guaranteed to be those types so store as strings
-            // handle conversion in presenter - it's business logic
-
-            currentPerson = new Person(Jobject.getString(fieldKeys.get(0)),
-                    Jobject.getString(fieldKeys.get(1)),
-                    Jobject.getString(fieldKeys.get(2)),
-                    Jobject.getString(fieldKeys.get(3)));
-        } catch (JSONException e) {
-            if (e.getMessage().contains("No value for name")) {
-                currentPerson = new Person("Not found", "", "","");
-            }
-            e.printStackTrace();
-        }
-    }
-
 }

@@ -1,5 +1,8 @@
 package uk.co.drwelch.sampleapp;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -13,6 +16,7 @@ class Repository {
     private static Repository myInstance = null;
     private static OkHttpClient myClient = null;
     private static final String rootURL = "https://swapi.co/api/people/";
+    private static final String[] KEYS = {"name","height","mass","created"};
 
     private Repository() { // private constructor for singleton
         myClient = new OkHttpClient();
@@ -43,6 +47,34 @@ class Repository {
         };
         myClient.newCall(request).enqueue(myCallback);
     }
+
+    public Person deserialise(String data) {
+
+        Person currentPerson;
+
+        try {
+            JSONObject Jobject = new JSONObject(data);
+
+            // responses not guaranteed to be those types so store as strings
+            // handle conversion in presenter - it's business logic
+
+            currentPerson = new Person(Jobject.getString(KEYS[0]),
+                    Jobject.getString(KEYS[1]),
+                    Jobject.getString(KEYS[2]),
+                    Jobject.getString(KEYS[3]));
+        } catch (JSONException e) {
+            if (e.getMessage().contains("No value for name")) { // proper test?
+                // get strings from resources is hacky if not got a Context ... hmmm
+                currentPerson = new Person("Not found", "", "","");
+            } else {
+                currentPerson = new Person("Error", "", "","");
+                // log error
+            }
+            e.printStackTrace();
+        }
+        return currentPerson;
+    }
+
 
     public interface RepoListener {
         void onSuccess(String data);

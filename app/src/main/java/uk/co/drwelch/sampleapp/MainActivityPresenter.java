@@ -1,6 +1,6 @@
 package uk.co.drwelch.sampleapp;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class MainActivityPresenter {
 
@@ -13,6 +13,7 @@ public class MainActivityPresenter {
 
     public void attachView(View view) {
         this.view = view;
+        view.setFieldLabels(model.getFieldLabels());
         updateView();
     }
 
@@ -34,27 +35,12 @@ public class MainActivityPresenter {
 
     public void updateView() {
         view.hideSpinner();
-        view.setFieldValues(getFieldsFromObject(model.getCurrentPerson()));
-    }
-
-    private HashMap<String,String> getFieldsFromObject(Person person) {
-
-        HashMap<String,String> viewData = new HashMap<String,String>();
-
-        viewData.put("name",person.getName());
-        viewData.put("mass",person.getMassFormatted());
-        viewData.put("height",person.getHeightFormatted());
-        viewData.put("created",person.getCreatedAtFormatted());
-
-        return viewData;
-    }
-
-    public String getFieldKey(int i) {
-        return model.getFieldKey(i);
+        view.setFieldValues(model.getFieldsFromObject());
     }
 
     public interface View {
-        void setFieldValues(HashMap<String,String> viewData);
+        void setFieldValues(ArrayList<String> values);
+        void setFieldLabels(ArrayList<String> labels);
         void showSpinner();
         void hideSpinner();
         void showErrorText();

@@ -7,23 +7,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MainActivityPresenter.View {
 
     private MainActivityPresenter presenter;
-    private HashMap<String, Integer> resourceIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         attachPresenter();
-        resourceIDs = new HashMap<>();
-        resourceIDs.put(presenter.getFieldKey(0), R.id.nameTextView);
-        resourceIDs.put(presenter.getFieldKey(1), R.id.massTextView);
-        resourceIDs.put(presenter.getFieldKey(2), R.id.heightTextView);
-        resourceIDs.put(presenter.getFieldKey(3), R.id.createdAtTextView);
     }
 
     @Override
@@ -52,24 +46,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
     // MainActivityPresenter.View interface
 
     public String getEntryValue() {
-        TextView myInput = findViewById(R.id.editText);
+        TextView myInput = findViewById(R.id.inputField);
         return myInput.getText().toString();
     }
 
-
-
-    public void setLabelValues(HashMap<String, String> viewLabels) {
-        for (HashMap.Entry<String, Integer> entry : resourceIDs.entrySet()) {
-            TextView mylabel = findViewById(entry.getValue());
-            mylabel.setText(viewData.get(entry.getKey()));
-        }
+    public void setFieldLabels(ArrayList<String> labels) {
+        ((TextView) findViewById(R.id.field0Label)).setText(labels.get(0));
+        ((TextView) findViewById(R.id.field1Label)).setText(labels.get(1));
+        ((TextView) findViewById(R.id.field2Label)).setText(labels.get(2));
+        ((TextView) findViewById(R.id.field3Label)).setText(labels.get(3));
     }
 
-    public void setFieldValues(HashMap<String, String> viewData) {
-        for (HashMap.Entry<String, Integer> entry : resourceIDs.entrySet()) {
-            TextView mylabel = findViewById(entry.getValue());
-            mylabel.setText(viewData.get(entry.getKey()));
-        }
+    public void setFieldValues(ArrayList<String> values) {
+        ((TextView) findViewById(R.id.field0TextView)).setText(values.get(0));
+        ((TextView) findViewById(R.id.field1TextView)).setText(values.get(1));
+        ((TextView) findViewById(R.id.field2TextView)).setText(values.get(2));
+        ((TextView) findViewById(R.id.field3TextView)).setText(values.get(3));
     }
 
     public void showSpinner() {
@@ -99,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             }
         } catch (NullPointerException e) {
-            // wasn't open or focused
+            // wasn't open or focused - meh
         }
     }
 }
