@@ -46,7 +46,7 @@
         android:onClick="fetchButtonClicked"
         android:text="@string/buttonLabel"
         android:textColor="@color/colorFieldValue"
-        android:backgroundTint="#@color/colorButton"
+        android:backgroundTint="@color/colorButton"
         app:layout_constraintBaseline_toBaselineOf="@+id/inputField"
         app:layout_constraintEnd_toEndOf="parent" />
 
