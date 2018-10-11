@@ -1,5 +1,6 @@
 package uk.co.drwelch.sampleapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -40,7 +41,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
     }
 
     public void fetchButtonClicked(View view) {
-        presenter.fetchClicked();
+
+        Intent intent = new Intent(this, PersonListActivity.class);
+        startActivity(intent);
+
+        //        presenter.fetchClicked();
     }
 
     // MainActivityPresenter.View interface
