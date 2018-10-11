@@ -7,4 +7,5 @@
     <string name="massLabelText">Weight (kg):</string>
     <string name="createdAtLabelText">Created on:</string>
     <string name="heightLabelText">Height (m):</string>
+    <string name="errorLabelText">Enter a character number</string>
 </resources>

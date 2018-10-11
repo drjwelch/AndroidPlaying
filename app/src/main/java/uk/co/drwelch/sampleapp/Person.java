@@ -16,19 +16,42 @@ public class Person {
         this.createdAt = createdAt;
     }
 
-    public String getMassAsString() {
-        return mass_kg;
+    public String getMassFormatted() {
+        String result = "";
+        try {
+            int mass = Integer.parseInt(mass_kg);
+            result = mass_kg + " kg";
+        } catch (NumberFormatException e) {
+            result = mass_kg;
+        }
+        return result;
     }
 
-    public String getHeightAsString() {
-        return height_m;
+    public String getHeightFormatted() {
+        String result = "";
+        try {
+            float height = (float) Integer.parseInt(height_m) / 100;
+            result = Float.toString(height) + " m";
+        } catch (NumberFormatException  e) {
+            result = height_m;
+        }
+        return result;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getCreatedAtDate() {
-        return createdAt;
+    public String getCreatedAtFormatted() {
+        String displayDate = "";
+        if (createdAt.length()<10) {
+            displayDate = "Unknown";
+        } else {
+            displayDate = createdAt.substring(8,10) + "/"
+                    + createdAt.substring(5,7) + "/"
+                    + createdAt.substring(0,4) + " at "
+                    + createdAt.substring(11,19);
+        }
+        return displayDate;
     }
 }

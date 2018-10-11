@@ -1,6 +1,5 @@
 package uk.co.drwelch.sampleapp;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivityPresenter {
@@ -22,60 +21,45 @@ public class MainActivityPresenter {
     }
 
     public void fetchClicked() {
+        view.hideSoftKeyboard();
         String value = view.getEntryValue();
         if (!value.isEmpty()) {
+            view.hideErrorText();
             view.showSpinner();
             model.refreshData(value);
         } else {
-            // error feedback on screen
+            view.showErrorText();
         }
     }
 
-    // TODO: take formatting elsewhere - but where? Presenter is getting tied to Model
-
     public void updateView() {
-        Person person = model.getCurrentPerson();
+        view.hideSpinner();
+        view.setFieldValues(getFieldsFromObject(model.getCurrentPerson()));
+    }
+
+    private HashMap<String,String> getFieldsFromObject(Person person) {
 
         HashMap<String,String> viewData = new HashMap<String,String>();
 
         viewData.put("name",person.getName());
+        viewData.put("mass",person.getMassFormatted());
+        viewData.put("height",person.getHeightFormatted());
+        viewData.put("created",person.getCreatedAtFormatted());
 
-        String mass = person.getMassAsString();
-        try {
-            int mass_kg = Integer.parseInt(mass);
-            mass = mass + " kg";
-        } catch (NumberFormatException e) {
-            // mass is text
-        }
-        viewData.put("mass",mass);
+        return viewData;
+    }
 
-        String height = person.getHeightAsString();
-        try {
-            float height_m = (float) Integer.parseInt(height) / 100;
-            height = Float.toString(height_m) + " m";
-        } catch (NumberFormatException  e) {
-            // height is text
-        }
-        viewData.put("height",height);
-
-        String date = person.getCreatedAtDate();
-        String displayDate;
-        if (date.length()<10) {
-            displayDate = "Unknown";
-        } else {
-            displayDate = date.substring(8,10) + "/" + date.substring(5,7) + "/" + date.substring(0,4)
-                        + " at " + date.substring(11,19);
-        }
-        viewData.put("created",displayDate);
-
-        view.hideSpinner();
-        view.setLabels(viewData);
+    public String getFieldKey(int i) {
+        return model.getFieldKey(i);
     }
 
     public interface View {
-        void setLabels(HashMap<String,String> viewData);
+        void setFieldValues(HashMap<String,String> viewData);
         void showSpinner();
         void hideSpinner();
+        void showErrorText();
+        void hideErrorText();
+        void hideSoftKeyboard();
         String getEntryValue();
     }
 }

@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Model implements Repository.RepoListener {
@@ -14,11 +15,16 @@ public class Model implements Repository.RepoListener {
     private Person currentPerson;
     private MainActivityPresenter myPresenter;
     private Repository myRepo;
+    private static final ArrayList<String> fieldKeys = new ArrayList<String>();
 
     public Model(MainActivityPresenter presenter) {
         myPresenter = presenter;
         myRepo = Repository.getInstance();
         currentPerson = new Person("Not selected", "", "","");
+        fieldKeys.add("name");
+        fieldKeys.add("height");
+        fieldKeys.add("mass");
+        fieldKeys.add("created");
     }
 
     public void refreshData(String command) {
@@ -27,6 +33,10 @@ public class Model implements Repository.RepoListener {
 
     public Person getCurrentPerson() {
         return currentPerson;
+    }
+
+    public String getFieldKey(int i) {
+        return fieldKeys.get(i);
     }
 
     // Repo.Listener interface
@@ -70,10 +80,10 @@ public class Model implements Repository.RepoListener {
             // responses not guaranteed to be those types so store as strings
             // handle conversion in presenter - it's business logic
 
-            currentPerson = new Person(Jobject.getString("name"),
-                    Jobject.getString("height"),
-                    Jobject.getString("mass"),
-                    Jobject.getString("created"));
+            currentPerson = new Person(Jobject.getString(fieldKeys.get(0)),
+                    Jobject.getString(fieldKeys.get(1)),
+                    Jobject.getString(fieldKeys.get(2)),
+                    Jobject.getString(fieldKeys.get(3)));
         } catch (JSONException e) {
             if (e.getMessage().contains("No value for name")) {
                 currentPerson = new Person("Not found", "", "","");

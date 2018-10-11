@@ -3,6 +3,7 @@ package uk.co.drwelch.sampleapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -17,20 +18,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        resourceIDs = new HashMap<String, Integer>();
-        resourceIDs.put("name", R.id.nameTextView);
-        resourceIDs.put("mass", R.id.massTextView);
-        resourceIDs.put("height", R.id.heightTextView);
-        resourceIDs.put("created", R.id.createdAtTextView);
         attachPresenter();
-    }
-
-    private void attachPresenter() {
-        presenter = (MainActivityPresenter) getLastCustomNonConfigurationInstance();
-        if (presenter == null) {
-            presenter = new MainActivityPresenter();
-        }
-        presenter.attachView(this);
+        resourceIDs = new HashMap<>();
+        resourceIDs.put(presenter.getFieldKey(0), R.id.nameTextView);
+        resourceIDs.put(presenter.getFieldKey(1), R.id.massTextView);
+        resourceIDs.put(presenter.getFieldKey(2), R.id.heightTextView);
+        resourceIDs.put(presenter.getFieldKey(3), R.id.createdAtTextView);
     }
 
     @Override
@@ -44,6 +37,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
         return presenter;
     }
 
+    private void attachPresenter() {
+        presenter = (MainActivityPresenter) getLastCustomNonConfigurationInstance();
+        if (presenter == null) {
+            presenter = new MainActivityPresenter();
+        }
+        presenter.attachView(this);
+    }
+
     public void fetchButtonClicked(View view) {
         presenter.fetchClicked();
     }
@@ -55,7 +56,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
         return myInput.getText().toString();
     }
 
-    public void setLabels(HashMap<String, String> viewData) {
+
+
+    public void setLabelValues(HashMap<String, String> viewLabels) {
+        for (HashMap.Entry<String, Integer> entry : resourceIDs.entrySet()) {
+            TextView mylabel = findViewById(entry.getValue());
+            mylabel.setText(viewData.get(entry.getKey()));
+        }
+    }
+
+    public void setFieldValues(HashMap<String, String> viewData) {
         for (HashMap.Entry<String, Integer> entry : resourceIDs.entrySet()) {
             TextView mylabel = findViewById(entry.getValue());
             mylabel.setText(viewData.get(entry.getKey()));
@@ -72,5 +82,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
         spinner.setVisibility(View.GONE);
     }
 
+    public void showErrorText() {
+        TextView errorText = findViewById(R.id.errorLabel);
+        errorText.setVisibility(View.VISIBLE);
+    }
+
+    public void hideErrorText() {
+        TextView errorText = findViewById(R.id.errorLabel);
+        errorText.setVisibility(View.GONE);
+    }
+
+    public void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        try {
+            if (imm.isAcceptingText()) { // verify if the soft keyboard is open
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+        } catch (NullPointerException e) {
+            // wasn't open or focused
+        }
+    }
 }
 

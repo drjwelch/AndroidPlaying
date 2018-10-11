@@ -18,7 +18,7 @@ class Repository {
         myClient = new OkHttpClient();
     }
 
-    public static synchronized Repository getInstance() {
+    public static synchronized Repository getInstance() {  // sync to prevent re-entrant
         if (myInstance == null) {
             myInstance = new Repository();
         }
