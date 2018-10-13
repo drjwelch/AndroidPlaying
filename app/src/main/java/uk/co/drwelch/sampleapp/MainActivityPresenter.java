@@ -2,13 +2,23 @@ package uk.co.drwelch.sampleapp;
 
 import java.util.ArrayList;
 
-public class MainActivityPresenter {
+public class MainActivityPresenter implements Model.Presenter {
 
     private Model model;
     private View view;
 
+    public void handleIncomingChoice(String name) {
+        setPersonIDfromName(name);
+        fetchClicked();
+    }
+
+    public String getIncomingExtraKey() {
+        return AppStrings.PERSONID;
+    }
+
     public MainActivityPresenter() {
-        this.model = new Model(this);
+        this.model = Model.getInstance();
+        model.attachPresenter(this);
     }
 
     public void attachView(View view) {
@@ -31,16 +41,42 @@ public class MainActivityPresenter {
         } else {
             view.showErrorText();
         }
+        try {
+            model.setCurrentPerson(value);
+        } catch (NoPersonDataException e) {
+            view.showErrorText();
+        }
     }
 
-    public void setPersonID(String value) {
-        view.setEntryValue("4"); // TODO set to value of person in list
-        fetchClicked();
+    public void setPersonIDfromName(String value) {
+        view.setEntryValue(value);
+    }
+
+    public ArrayList<String> setTopFieldOnly(String error) {
+        ArrayList<String> fields;
+        fields = new ArrayList<String>();
+        fields.add(error);
+        for (int i=1;i<model.getFieldLabels().size();i++) {
+            fields.add("");
+        }
+        return fields;
+    }
+
+    public void onModelError(String message) {
+        view.hideSpinner();
+        ArrayList<String> fields = setTopFieldOnly(message);
+        view.setFieldValues(fields);
     }
 
     public void updateView() {
         view.hideSpinner();
-        view.setFieldValues(model.getFieldsFromObject());
+        ArrayList<String> fields;
+        try {
+            fields = model.getFieldsFromObject();
+        } catch (NoPersonDataException e) {
+            fields = setTopFieldOnly(e.getMessage());
+        }
+        view.setFieldValues(fields);
     }
 
     public interface View {

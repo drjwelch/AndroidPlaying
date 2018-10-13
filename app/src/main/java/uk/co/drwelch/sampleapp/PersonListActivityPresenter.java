@@ -1,18 +1,23 @@
 package uk.co.drwelch.sampleapp;
 
-public class PersonListActivityPresenter {
+public class PersonListActivityPresenter implements Model.Presenter {
 
-    private PersonListModel model;
+    private Model model;
     private View view;
 
     public PersonListActivityPresenter() {
-        this.model = new PersonListModel(this);
+        this.model = Model.getInstance();
+        model.attachPresenter(this);
+    }
+
+    public String getOutgoingExtraKey() {
+        return AppStrings.PERSONID;
     }
 
     public void attachView(View view) {
         this.view = view;
-        model.refreshData("nothing");
-        view.setData(model.getData());
+        model.refreshData("");
+//        view.setData(model.getAllNames());
 //        view.setFieldLabels(model.getFieldLabels());
         updateView();
     }
@@ -38,8 +43,16 @@ public class PersonListActivityPresenter {
 
     public void updateView() {
 //        view.hideSpinner();
-        view.setData(model.getData());
+        try {
+            view.setData(model.getAllNames());
+        } catch (NoPersonDataException e) {
+            view.setData(new String[] {AppStrings.NO_DATA});
+        }
 //        view.setFieldValues(model.getFieldsFromObject());
+    }
+
+    public void onModelError(String message) {
+        view.setData(new String[] {message});
     }
 
     public interface View {

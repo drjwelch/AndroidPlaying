@@ -51,7 +51,7 @@ public class Person {
         return result;
     }
 
-    private String getName() {
+    public String getName() {
         return name;
     }
 

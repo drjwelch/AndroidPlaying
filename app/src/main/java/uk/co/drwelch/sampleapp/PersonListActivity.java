@@ -14,13 +14,8 @@ import java.util.ArrayList;
 
 public class PersonListActivity extends AppCompatActivity implements PersonListActivityPresenter.View {
 
-    public static final String PERSONID = "com.example.myfirstapp.PERSONID";
-
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private PersonListActivityPresenter presenter;
-    private String[] myDataset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +30,7 @@ public class PersonListActivity extends AppCompatActivity implements PersonListA
         mRecyclerView = findViewById(R.id.personListRecycler);
         mRecyclerView.setHasFixedSize(true); // gives a performance improvement
         // recycler view's layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -60,13 +54,12 @@ public class PersonListActivity extends AppCompatActivity implements PersonListA
 
     // PersonListActivityPresenter.View interface
 
-    public void setData(String[] data) { // TODO change to Person[]
-        myDataset = data;
+    public void setData(String[] data) {
         // recycler view's data adapter
-        mAdapter = new PersonListAdapter(myDataset, new PersonListAdapter.OnItemClickListener() {
+        RecyclerView.Adapter mAdapter = new PersonListAdapter(data, new PersonListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String item) { // click handler for items in the layout
-                presenter.itemClicked(item); // TODO remove context - needed only for toast
+                presenter.itemClicked(item);
             }
         });
         mRecyclerView.setAdapter(mAdapter);
@@ -74,7 +67,7 @@ public class PersonListActivity extends AppCompatActivity implements PersonListA
 
     public void startDetailViewWith(String value) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(PERSONID, value);
+        intent.putExtra(presenter.getOutgoingExtraKey(), value);
         startActivity(intent);
     }
 }
