@@ -1,9 +1,13 @@
 package uk.co.drwelch.sampleapp;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -75,6 +79,22 @@ class Repository {
         return currentPerson;
     }
 
+    public String[] extractPeople(String data) {
+
+        ArrayList<String> result = new ArrayList<>();
+
+        try {
+            JSONObject Jobject = new JSONObject(data);
+            JSONArray peoplelist = Jobject.getJSONArray("results");
+            for (int i=0; i<peoplelist.length(); i++) {
+                result.add(peoplelist.getJSONObject(i).getString("name"));
+            }
+        } catch (JSONException e) {
+                e.printStackTrace();
+        }
+        // bonkers mechanism to cast from ArrayList<String> to String[]
+        return Arrays.copyOf(result.toArray(),result.size(),String[].class);
+    }
 
     public interface RepoListener {
         void onSuccess(String data);

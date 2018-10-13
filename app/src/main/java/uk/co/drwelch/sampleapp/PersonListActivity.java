@@ -23,8 +23,8 @@ public class PersonListActivity extends AppCompatActivity implements PersonListA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_list);
-        attachPresenter();
         createRecyclerView();
+        attachPresenter();
     }
 
     private void createRecyclerView() {
@@ -34,14 +34,6 @@ public class PersonListActivity extends AppCompatActivity implements PersonListA
         // recycler view's layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        // recycler view's data adapter
-        mAdapter = new PersonListAdapter(myDataset, new PersonListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(String item) { // click handler for items in the layout
-                presenter.itemClicked(getApplicationContext(), item); // TODO remove context - needed only for toast
-            }
-        });
-        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -67,6 +59,14 @@ public class PersonListActivity extends AppCompatActivity implements PersonListA
 
     public void setData(String[] data) { // TODO change to Person[]
         myDataset = data;
+        // recycler view's data adapter
+        mAdapter = new PersonListAdapter(myDataset, new PersonListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String item) { // click handler for items in the layout
+                presenter.itemClicked(getApplicationContext(), item); // TODO remove context - needed only for toast
+            }
+        });
+        mRecyclerView.setAdapter(mAdapter);
     }
 
 

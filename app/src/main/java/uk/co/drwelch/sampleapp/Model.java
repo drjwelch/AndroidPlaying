@@ -21,6 +21,7 @@ public class Model implements Repository.RepoListener {
         currentPerson = new Person("Not selected", "", "","");
     }
 
+    // TODO decide if we need this command - if it's one model per presenter maybe not
     public void refreshData(String command) {
         myRepo.fetch(command, this);
     }

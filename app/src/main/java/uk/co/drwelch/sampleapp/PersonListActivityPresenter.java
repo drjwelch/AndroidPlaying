@@ -13,6 +13,8 @@ public class PersonListActivityPresenter {
 
     public void attachView(View view) {
         this.view = view;
+        model.refreshData("nothing");
+        view.setData(model.getData());
 //        view.setFieldLabels(model.getFieldLabels());
         updateView();
     }
@@ -35,7 +37,7 @@ public class PersonListActivityPresenter {
 
     public void updateView() {
 //        view.hideSpinner();
-        view.setData(model.refreshData("https://bullshit.com"));
+        view.setData(model.getData());
 //        view.setFieldValues(model.getFieldsFromObject());
     }
 
