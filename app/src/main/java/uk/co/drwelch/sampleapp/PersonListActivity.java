@@ -7,32 +7,69 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class PersonListActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class PersonListActivity extends AppCompatActivity implements PersonListActivityPresenter.View {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private PersonListActivityPresenter presenter;
+    private String[] myDataset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_list);
+        attachPresenter();
+        createRecyclerView();
+    }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.personListRecycler);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
+    private void createRecyclerView() {
+        // recycler view itself
+        mRecyclerView = findViewById(R.id.personListRecycler);
+        mRecyclerView.setHasFixedSize(true); // gives a performance improvement
+        // recycler view's layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // specify an adapter (see also next example)
-        String[] myDataset = {"Bill", "Ben", "Bob", "Bev", "Deb", "Dib", "Dob", "Dub", "Rab", "Reb", "Rib", "Rub", "Rob"};
-        mAdapter = new PersonListAdapter(myDataset);
+        // recycler view's data adapter
+        mAdapter = new PersonListAdapter(myDataset, new PersonListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String item) { // click handler for items in the layout
+                presenter.itemClicked(getApplicationContext(), item); // TODO remove context - needed only for toast
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
     }
+
+    @Override
+    protected void onDestroy() {
+        presenter.detachView();
+        super.onDestroy();
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return presenter;
+    }
+
+    private void attachPresenter() {
+        presenter = (PersonListActivityPresenter) getLastCustomNonConfigurationInstance();
+        if (presenter == null) {
+            presenter = new PersonListActivityPresenter();
+        }
+        presenter.attachView(this);
+    }
+
+    // PersonListActivityPresenter.View interface
+
+    public void setData(String[] data) { // TODO change to Person[]
+        myDataset = data;
+    }
+
+
 }
+
 
