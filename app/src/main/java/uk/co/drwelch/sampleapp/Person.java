@@ -5,13 +5,15 @@ import java.util.ArrayList;
 public class Person {
 
     private String name;
+    private String id;
     private String height_m;
     private String mass_kg;
     private String createdAt;
     public static final String[] PROPERTIES = {"Name:", "Height:", "Mass:", "Created:"};
 
-    public Person(String name, String height_m, String mass_kg, String createdAt) {
+    public Person(String name, String id, String height_m, String mass_kg, String createdAt) {
         this.name = name;
+        this.id = id;
         this.height_m = height_m;
         this.mass_kg = mass_kg;
         this.createdAt = createdAt;
@@ -52,6 +54,8 @@ public class Person {
     private String getName() {
         return name;
     }
+
+    public String getID() { return id; }
 
     private String getCreatedAtFormatted() {
         String displayDate;

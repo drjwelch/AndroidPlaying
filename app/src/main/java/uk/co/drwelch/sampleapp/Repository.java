@@ -62,16 +62,21 @@ class Repository {
             // responses not guaranteed to be those types so store as strings
             // handle conversion in presenter - it's business logic
 
+            // TODO sort this crap
+            String[] temp = Jobject.getString("url").split("/");
+            String personID = temp[temp.length - 1];
+
             currentPerson = new Person(Jobject.getString(KEYS[0]),
+                    personID,
                     Jobject.getString(KEYS[1]),
                     Jobject.getString(KEYS[2]),
                     Jobject.getString(KEYS[3]));
         } catch (JSONException e) {
             if (e.getMessage().contains("No value for name")) { // proper test?
-                // get strings from resources is hacky if not got a Context ... hmmm
-                currentPerson = new Person("Not found", "", "","");
+                // get strings from resources - but is hacky if not got a Context ... hmmm
+                currentPerson = new Person("Not found", "","", "","");
             } else {
-                currentPerson = new Person("Error", "", "","");
+                currentPerson = new Person("Error", "","", "","");
                 // log error
             }
             e.printStackTrace();

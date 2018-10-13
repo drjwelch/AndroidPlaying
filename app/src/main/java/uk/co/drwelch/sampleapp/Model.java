@@ -18,7 +18,7 @@ public class Model implements Repository.RepoListener {
     public Model(MainActivityPresenter presenter) {
         myPresenter = presenter;
         myRepo = Repository.getInstance();
-        currentPerson = new Person("Not selected", "", "","");
+        currentPerson = new Person("Not selected", "","", "","");
     }
 
     // TODO decide if we need this command - if it's one model per presenter maybe not
@@ -49,7 +49,7 @@ public class Model implements Repository.RepoListener {
     public void onFailure(Throwable t) {
         if (t instanceof UnknownHostException) {
             // internet is off
-            currentPerson = new Person("No network", "", "","");
+            currentPerson = new Person("No network", "","", "","");
         }
         t.printStackTrace();
         try {
