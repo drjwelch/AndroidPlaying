@@ -33,6 +33,11 @@ public class MainActivityPresenter {
         }
     }
 
+    public void setPersonID(String value) {
+        view.setEntryValue("4"); // TODO set to value of person in list
+        fetchClicked();
+    }
+
     public void updateView() {
         view.hideSpinner();
         view.setFieldValues(model.getFieldsFromObject());
@@ -47,5 +52,6 @@ public class MainActivityPresenter {
         void hideErrorText();
         void hideSoftKeyboard();
         String getEntryValue();
+        void setEntryValue(String value);
     }
 }

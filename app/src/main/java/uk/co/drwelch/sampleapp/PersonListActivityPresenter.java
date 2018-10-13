@@ -1,7 +1,5 @@
 package uk.co.drwelch.sampleapp;
 
-import android.widget.Toast;
-
 public class PersonListActivityPresenter {
 
     private PersonListModel model;
@@ -23,9 +21,12 @@ public class PersonListActivityPresenter {
         this.view = null;
     }
 
-    public void itemClicked(android.content.Context ctx, String value) {
+    public void itemClicked(String value) {
+        view.startDetailViewWith(value);
+
+//        Toast.makeText(ctx, value, Toast.LENGTH_LONG).show();
+
 //        String value = view.getItemValue();
-        Toast.makeText(ctx, value, Toast.LENGTH_LONG).show();
 //        if (!value.isEmpty()) {
 //            view.hideErrorText();
 //            view.showSpinner();
@@ -43,5 +44,6 @@ public class PersonListActivityPresenter {
 
     public interface View {
         void setData(String[] data);
+        void startDetailViewWith(String value);
     }
 }

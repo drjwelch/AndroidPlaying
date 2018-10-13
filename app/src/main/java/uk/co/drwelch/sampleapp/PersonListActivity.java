@@ -1,5 +1,6 @@
 package uk.co.drwelch.sampleapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class PersonListActivity extends AppCompatActivity implements PersonListActivityPresenter.View {
+
+    public static final String PERSONID = "com.example.myfirstapp.PERSONID";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -63,13 +66,17 @@ public class PersonListActivity extends AppCompatActivity implements PersonListA
         mAdapter = new PersonListAdapter(myDataset, new PersonListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String item) { // click handler for items in the layout
-                presenter.itemClicked(getApplicationContext(), item); // TODO remove context - needed only for toast
+                presenter.itemClicked(item); // TODO remove context - needed only for toast
             }
         });
         mRecyclerView.setAdapter(mAdapter);
     }
 
-
+    public void startDetailViewWith(String value) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(PERSONID, value);
+        startActivity(intent);
+    }
 }
 
 

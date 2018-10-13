@@ -19,6 +19,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         attachPresenter();
+        // see what user clicked on
+        Intent intent = getIntent();
+        if (intent != null) {
+            String personID = intent.getStringExtra(PersonListActivity.PERSONID);
+            if (personID != null) {
+                presenter.setPersonID(personID);
+            }
+        }
     }
 
     @Override
@@ -53,6 +61,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
     public String getEntryValue() {
         TextView myInput = findViewById(R.id.inputField);
         return myInput.getText().toString();
+    }
+
+    public void setEntryValue(String value) {
+        TextView myInput = findViewById(R.id.inputField);
+        myInput.setText(value);
     }
 
     public void setFieldLabels(ArrayList<String> labels) {
