@@ -20,8 +20,8 @@ class Repository {
     private static Repository myInstance = null;
     private static OkHttpClient myClient = null;
     private static final String rootURL = "https://swapi.co/api/people/";
-    private static final String NO_RESULTS = "No results";
     private static final String[] KEYS = {"name","height","mass","created"};
+    private static final String MASTER_KEY = "results";
 
     private Repository() { // private constructor for singleton
         myClient = new OkHttpClient();
@@ -62,7 +62,6 @@ class Repository {
 //            // responses not guaranteed to be those types so store as strings
 //            // handle conversion in presenter - it's business logic
 //
-//            // TODO sort this crap
 //            String[] temp = Jobject.getString("url").split("/");
 //            String personID = temp[temp.length - 1];
 //
@@ -88,49 +87,46 @@ class Repository {
 
         // Get array of people from response
         ArrayList<Person> result = new ArrayList<>();
-        JSONArray peoplelist;
-        JSONObject jobject;
+        JSONArray personsJArray;
 
         try {
-            jobject = new JSONObject(data);
-            peoplelist = jobject.getJSONArray("results");
+            personsJArray = new JSONObject(data).getJSONArray(Repository.MASTER_KEY);
         } catch (JSONException e) {
-            throw new NoPersonDataException(Repository.NO_RESULTS);
+            throw new NoPersonDataException(AppStrings.NO_RESULTS);
         }
 
         // Parse each element into Person object
         boolean success;
-        String personID;
+//        String personID;
         String[] temp;
         JSONObject p = null;
 
-        for (int i=0; i<peoplelist.length(); i++) {
-            // TODO sort this crap
+        for (int i=0; i<personsJArray.length(); i++) {
             success = true;
-            personID = "";
+//            personID = "";
             try {
-                p = peoplelist.getJSONObject(i);
-                temp = p.getString("url").split("/");
-                personID = temp[temp.length - 1];
+                p = personsJArray.getJSONObject(i);
+//                temp = p.getString("url").split("/");
+//                personID = temp[temp.length - 1];
             } catch (JSONException e) {
                 success = false;
-                // ignore this person if no ID
+                // ignore this person if ANY PROBLEM no ID
             }
+            // no 'finally' in Java to the dismay of us Pythonistas
             if (success) {
                 try {
                     Person currentPerson = new Person(p.getString(KEYS[0]),
-                            personID,
+//                            personID,
                             p.getString(KEYS[1]),
                             p.getString(KEYS[2]),
                             p.getString(KEYS[3]));
                     result.add(currentPerson);
                 } catch (JSONException e) {
                     // log error
-                    throw new NoPersonDataException("Response error");
+                    throw new NoPersonDataException(AppStrings.RESPONSE_ERROR);
                 }
             }
         }
-        // TODO sort this crap
         // bonkers mechanism to cast from ArrayList<Person> to Person[]
         return Arrays.copyOf(result.toArray(),result.size(),Person[].class);
     }
