@@ -5,34 +5,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements MainActivityPresenter.View {
 
-    private RecyclerView mRecyclerView;
     private MainActivityPresenter presenter;
+    private RecyclerView recycler;
     private boolean isComingBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_person_list);
+        setContentView(R.layout.activity_main);
         createRecyclerView();
-        isComingBack = false;
-        attachPresenter();
-    }
 
-    private void createRecyclerView() {
-        // recycler view itself
-        mRecyclerView = findViewById(R.id.personListRecycler);
-        mRecyclerView.setHasFixedSize(true); // gives a performance improvement
-        // recycler view's layout manager
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        attachPresenter();
+        isComingBack = false;
     }
 
     @Override
@@ -55,6 +44,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
         presenter.attachView(this);
     }
 
+    private void createRecyclerView() {
+        // recycler view itself
+        recycler = findViewById(R.id.personListRecycler);
+        recycler.setHasFixedSize(true); // gives a performance improvement
+        // recycler view's layout manager
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void retryButtonClicked(View view) {
+        presenter.refreshAndUpdate();
+    }
+
+
     // PersonListActivityPresenter.View interface
 
     public void setData(String[] data) {
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
                 presenter.itemClicked(item);
             }
         });
-        mRecyclerView.setAdapter(mAdapter);
+        recycler.setAdapter(mAdapter);
     }
 
     public void startDetailViewWith(String value) {
@@ -73,6 +75,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
         intent.putExtra(presenter.getOutgoingExtraKey(), value);
         startActivity(intent);
     }
+
+    public void showRetry() {
+        Button retry = findViewById(R.id.retryButton);
+        retry.setVisibility(View.VISIBLE);
+    }
+
+    public void hideRetry() {
+        Button retry = findViewById(R.id.retryButton);
+        retry.setVisibility(View.GONE);
+    }
+
 }
 
 

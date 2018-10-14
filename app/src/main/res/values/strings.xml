@@ -8,4 +8,5 @@
     <string name="fieldLabel2Text">Weight (kg):</string>
     <string name="fieldLabel3Text">Created on:</string>
     <string name="errorLabelText">Enter a character number</string>
+    <string name="retryButtonLabel">RETRY</string>
 </resources>

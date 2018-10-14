@@ -24,7 +24,7 @@ public class DetailViewActivityPresenter implements Model.Presenter {
     public void attachView(View view) {
         this.view = view;
         view.setFieldLabels(model.getFieldLabels());
-        updateView();
+        updateView(AppStrings.SUCCESS);
     }
 
     public void detachView(boolean isComingBack) {
@@ -65,21 +65,23 @@ public class DetailViewActivityPresenter implements Model.Presenter {
         return fields;
     }
 
-    public void onModelError(String message) {
+    public void updateView(String message) {
         view.hideSpinner();
-        ArrayList<String> fields = setTopFieldOnly(message);
-        view.setFieldValues(fields);
-    }
-
-    public void updateView() {
-        view.hideSpinner();
+        view.hideErrorText();
         ArrayList<String> fields;
-        try {
-            fields = model.getFieldsFromObject();
-        } catch (NoPersonDataException e) {
-            fields = setTopFieldOnly(e.getMessage());
+        if (message.equals(AppStrings.SUCCESS)) {
+            try {
+                fields = model.getFieldsFromObject();
+            } catch (NoPersonDataException e) {
+                fields = setTopFieldOnly(e.getMessage());
+                view.showErrorText();
+            }
+            view.setFieldValues(fields);
+        } else {
+            fields = setTopFieldOnly(message);
+            view.setFieldValues(fields);
+            view.showErrorText();
         }
-        view.setFieldValues(fields);
     }
 
     public interface View {

@@ -9,6 +9,5 @@ public class AppStrings {
     public static final String NO_NETWORK = "No network connection";
     public static final String NETWORK_ERROR = "Network error";
     public static final String NAME_INVALID = "Name not found";
-
-
+    public static final String SUCCESS = "uk.co.drwelch.sampleapp.SUCCESS";
 }

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailViewActivity">
+
+    <TextView
+        android:id="@+id/inputPrompt"
+        android:layout_width="123dp"
+        android:layout_height="@dimen/textheight"
+        android:gravity="start|center_vertical"
+        android:text="@string/inputPromptText"
+        android:textColor="@color/colorFieldLabel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.06"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.049" />
+
+    <EditText
+        android:id="@+id/inputField"
+        android:layout_width="125dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:gravity="start|center_vertical"
+        android:inputType="number"
+        android:textColor="@color/colorFieldValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/inputPrompt"
+        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintStart_toEndOf="@+id/inputPrompt" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:onClick="fetchButtonClicked"
+        android:text="@string/buttonLabel"
+        android:textColor="@color/colorFieldValue"
+        android:backgroundTint="@color/colorButton"
+        app:layout_constraintBaseline_toBaselineOf="@+id/inputField"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/field0TextView"
+        android:layout_width="140dp"
+        android:layout_height="@dimen/textheight"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="44dp"
+        android:gravity="start|center_vertical"
+        android:textColor="@color/colorFieldValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/field0Label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/field0Label" />
+
+    <TextView
+        android:id="@+id/field2TextView"
+        android:layout_width="140dp"
+        android:layout_height="@dimen/textheight"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="44dp"
+        android:gravity="start|center_vertical"
+        android:textColor="@color/colorFieldValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/field2Label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/field2Label" />
+
+    <TextView
+        android:id="@+id/field3TextView"
+        android:layout_width="140dp"
+        android:layout_height="@dimen/doubleTextHeight"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="44dp"
+        android:gravity="start|center_vertical"
+        android:textColor="@color/colorFieldValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/field3Label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/field3Label" />
+
+    <TextView
+        android:id="@+id/field1TextView"
+        android:layout_width="138dp"
+        android:layout_height="@dimen/textheight"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="44dp"
+        android:gravity="start|center_vertical"
+        android:textColor="@color/colorFieldValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/field1Label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/field1Label" />
+
+    <TextView
+        android:id="@+id/field0Label"
+        android:layout_width="93dp"
+        android:layout_height="@dimen/textheight"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="56dp"
+        android:ems="10"
+        android:gravity="start|center_vertical"
+        android:text="@string/fieldLabel0Text"
+        android:textColor="@color/colorFieldLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputPrompt" />
+
+    <TextView
+        android:id="@+id/field2Label"
+        android:layout_width="92dp"
+        android:layout_height="@dimen/textheight"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:gravity="start|center_vertical"
+        android:text="@string/fieldLabel2Text"
+        android:textColor="@color/colorFieldLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/field1Label" />
+
+    <TextView
+        android:id="@+id/field3Label"
+        android:layout_width="92dp"
+        android:layout_height="@dimen/textheight"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:gravity="start|center_vertical"
+        android:text="@string/fieldLabel3Text"
+        android:textColor="@color/colorFieldLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/field2Label" />
+
+    <TextView
+        android:id="@+id/field1Label"
+        android:layout_width="93dp"
+        android:layout_height="@dimen/textheight"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:gravity="start|center_vertical"
+        android:text="@string/fieldLabel1Text"
+        android:textColor="@color/colorFieldLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/field0Label" />
+
+    <TextView
+        android:id="@+id/errorLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/errorLabelText"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/field3TextView" />
+
+    <ProgressBar
+        android:id="@+id/spinner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_marginBottom="64dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

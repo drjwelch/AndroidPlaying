@@ -15,7 +15,7 @@ public class Model implements Repository.RepoListener {
     private Person[] allPeople;
     private ArrayList<Model.Presenter> presenters = new ArrayList<>();
     private Repository repo;
-    private String errorMessage;
+//    private String errorMessage;
     private static final ArrayList<String> fieldKeys = new ArrayList<>();
     private static final int INVALID = -1;
     private static final int DEFAULT_PERSON = 0;
@@ -114,32 +114,27 @@ public class Model implements Repository.RepoListener {
         throw new NoPersonDataException(AppStrings.NONE_SELECTED);
     }
 
-    private void initViewUpdate() {
+    private void initViewUpdate(final String msg) {
         // Post event to 'windowmainloop' for each attached presenter
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 for (Model.Presenter p:presenters) {
-                    p.updateView();
+                    p.updateView(msg);
                 }
             }
         });
-    }
-
-    private void sendError(String message) {
-        for (Model.Presenter p:presenters) {
-            p.onModelError(message);
-        }
     }
 
     // Repo.Listener interface
 
     public void onFailure(Throwable t) {
         dataLoaded = false;
+        String err;
         if (t instanceof UnknownHostException) {
-            sendError(AppStrings.NO_NETWORK);
+            err = AppStrings.NO_NETWORK;
         } else {
-            sendError(AppStrings.NETWORK_ERROR);
+            err = AppStrings.NETWORK_ERROR;
         }
         t.printStackTrace();
         try {
@@ -147,24 +142,24 @@ public class Model implements Repository.RepoListener {
         } catch (InterruptedException e) {
             // do nothing?
         }
-        initViewUpdate();
+        initViewUpdate(err);
     }
 
     public void onSuccess(String data) {
         // Cache and extract results
+        String res = AppStrings.SUCCESS;
         try {
             allPeople = repo.extractPeople(data);
             dataLoaded = true;
         } catch (NoPersonDataException e) {
-            sendError(e.getMessage());
+            res = e.getMessage();
         }
 //        currentPerson = repo.deserialise(data);
-        initViewUpdate();
+        initViewUpdate(res);
     }
 
     public interface Presenter {
-        void updateView();
-        void onModelError(String msg);
+        void updateView(String message);
     }
 }
 

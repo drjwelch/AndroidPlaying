@@ -18,9 +18,11 @@ public class DetailViewActivity extends AppCompatActivity implements DetailViewA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_detailview);
+
         attachPresenter();
         this.isComingBack = false;
+
         // see what user clicked on to arrive here
         Intent intent = getIntent();
         if (intent != null) {
@@ -49,7 +51,6 @@ public class DetailViewActivity extends AppCompatActivity implements DetailViewA
     }
 
     public void fetchButtonClicked(View view) {
-
         presenter.fetchClicked();
     }
 

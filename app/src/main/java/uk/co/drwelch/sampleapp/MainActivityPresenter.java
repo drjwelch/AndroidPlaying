@@ -16,10 +16,14 @@ public class MainActivityPresenter implements Model.Presenter {
 
     public void attachView(View view) {
         this.view = view;
+        refreshAndUpdate();
+    }
+
+    public void refreshAndUpdate() {
         model.refreshData("");
 //        view.setData(model.getAllNames());
 //        view.setFieldLabels(model.getFieldLabels());
-        updateView();
+        updateView(AppStrings.SUCCESS);
     }
 
     public void detachView(boolean isComingBack) {
@@ -44,22 +48,27 @@ public class MainActivityPresenter implements Model.Presenter {
 //        }
     }
 
-    public void updateView() {
+    public void updateView(String message) {
 //        view.hideSpinner();
-        try {
-            view.setData(model.getAllNames());
-        } catch (NoPersonDataException e) {
-            view.setData(new String[] {AppStrings.NO_DATA});
-        }
+        view.hideRetry();
+        if (message.equals(AppStrings.SUCCESS)) {
+            try {
+                view.setData(model.getAllNames());
+            } catch (NoPersonDataException e) {
+                view.setData(new String[]{AppStrings.NO_DATA});
+                view.showRetry();
+            }
 //        view.setFieldValues(model.getFieldsFromObject());
-    }
-
-    public void onModelError(String message) {
-        view.setData(new String[] {message});
+        } else {
+            view.setData(new String[] {message});
+            view.showRetry();
+        }
     }
 
     public interface View {
         void setData(String[] data);
         void startDetailViewWith(String value);
+        void showRetry();
+        void hideRetry();
     }
 }
