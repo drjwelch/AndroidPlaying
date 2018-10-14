@@ -52,37 +52,6 @@ class Repository {
         myClient.newCall(request).enqueue(myCallback);
     }
 
-//    public Person deserialise(String data) {
-//
-//        Person currentPerson;
-//
-//        try {
-//            JSONObject Jobject = new JSONObject(data);
-//
-//            // responses not guaranteed to be those types so store as strings
-//            // handle conversion in presenter - it's business logic
-//
-//            String[] temp = Jobject.getString("url").split("/");
-//            String personID = temp[temp.length - 1];
-//
-//            currentPerson = new Person(Jobject.getString(KEYS[0]),
-//                    personID,
-//                    Jobject.getString(KEYS[1]),
-//                    Jobject.getString(KEYS[2]),
-//                    Jobject.getString(KEYS[3]));
-//        } catch (JSONException e) {
-//            if (e.getMessage().contains("No value for name")) { // proper test?
-//                // get strings from resources - but is hacky if not got a Context ... hmmm
-//                currentPerson = new Person("Not found", "","", "","");
-//            } else {
-//                currentPerson = new Person("Error", "","", "","");
-//                // log error
-//            }
-//            e.printStackTrace();
-//        }
-//        return currentPerson;
-//    }
-
     public Person[] extractPeople(String data) throws NoPersonDataException {
 
         // Get array of people from response
@@ -97,20 +66,16 @@ class Repository {
 
         // Parse each element into Person object
         boolean success;
-//        String personID;
         String[] temp;
         JSONObject p = null;
 
         for (int i=0; i<personsJArray.length(); i++) {
             success = true;
-//            personID = "";
             try {
                 p = personsJArray.getJSONObject(i);
-//                temp = p.getString("url").split("/");
-//                personID = temp[temp.length - 1];
             } catch (JSONException e) {
                 success = false;
-                // ignore this person if ANY PROBLEM no ID
+                // ignore this person
             }
             // no 'finally' in Java to the dismay of us Pythonistas
             if (success) {

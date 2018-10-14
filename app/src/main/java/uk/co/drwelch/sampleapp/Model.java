@@ -15,10 +15,6 @@ public class Model implements Repository.RepoListener {
     private Person[] allPeople;
     private ArrayList<Model.DataChangeListener> presenters = new ArrayList<>();
     private Repository repo;
-//    private String errorMessage;
-//    private static final ArrayList<String> fieldKeys = new ArrayList<>();
-//   private static final int INVALID = -1;
-//    private static final int DEFAULT_PERSON = 0;
     private static Model modelInstance = null;
 
     private Model() {
@@ -26,16 +22,6 @@ public class Model implements Repository.RepoListener {
         dataLoaded = false;
     }
 
-//    private void invalidateModelData(String message) {
-//        currentPerson = Model.INVALID;
-//        errorMessage = message;
-//    }
-//
-//    private void validateModelData() {
-//        currentPerson = Model.DEFAULT_PERSON;
-//        errorMessage = "";
-//    }
-//
     public static synchronized Model getInstance() {  // sync to prevent re-entrant
         if (modelInstance == null) {
             modelInstance = new Model();
@@ -60,10 +46,6 @@ public class Model implements Repository.RepoListener {
         presenters.remove(thatPresenter);
     }
 
-//    public String getErrorMessage() {
-//        return errorMessage;
-//    }
-//
     public void setCurrentPerson(String name) throws NoPersonDataException {
         if (dataLoaded) {
             currentPersonName = name;
@@ -75,18 +57,6 @@ public class Model implements Repository.RepoListener {
     public void refreshData() {
         repo.fetch(this);
     }
-
-//    public String findPersonByName(String name) throws NoPersonDataException {
-//        if (currentPerson == Model.INVALID) {
-//            throw new NoPersonDataException(AppStrings.NOT_LOADED);
-//        }
-//        for (Person person : allPeople) {
-//            if (person.getName().equals(name)) {
-//                return person.getID();
-//            }
-//        }
-//        throw new NoPersonDataException(AppStrings.NAME_INVALID);
-//    }
 
     public String[] getAllNames() throws NoPersonDataException {
         if (!dataLoaded) {
@@ -155,7 +125,6 @@ public class Model implements Repository.RepoListener {
         } catch (NoPersonDataException e) {
             res = e.getMessage();
         }
-//        currentPerson = repo.deserialise(data);
         initViewUpdate(res);
     }
 

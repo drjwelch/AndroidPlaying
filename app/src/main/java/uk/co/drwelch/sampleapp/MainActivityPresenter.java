@@ -23,8 +23,6 @@ public class MainActivityPresenter implements Model.DataChangeListener {
 
     public void refreshAndUpdate() {
         model.refreshData();
-//        view.setData(model.getAllNames());
-//        view.setFieldLabels(model.getFieldLabels());
         updateView(AppStrings.SUCCESS);
     }
 
@@ -40,16 +38,6 @@ public class MainActivityPresenter implements Model.DataChangeListener {
             view.startDetailViewWith(value);
         }
     }
-//        Toast.makeText(ctx, value, Toast.LENGTH_LONG).show();
-
-//        String value = view.getItemValue();
-//        if (!value.isEmpty()) {
-//            view.hideErrorText();
-//            view.showSpinner();
-//            model.refreshData(value);
-//        } else {
-//            view.showErrorText();
-//        }
 
     public void updateView(String message) {
 //        view.hideSpinner();
@@ -63,7 +51,6 @@ public class MainActivityPresenter implements Model.DataChangeListener {
                 errorState = true;
                 view.showRetry();
             }
-//        view.setFieldValues(model.getFieldsFromObject());
         } else {
             view.setData(new String[] {message});
             errorState = true;
