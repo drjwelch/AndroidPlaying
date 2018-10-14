@@ -40,7 +40,6 @@ public class MainActivityPresenter implements Model.DataChangeListener {
     }
 
     public void updateView(String message) {
-//        view.hideSpinner();
         view.hideRetry();
         if (message.equals(AppStrings.SUCCESS)) {
             try {

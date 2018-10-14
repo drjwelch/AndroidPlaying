@@ -43,7 +43,19 @@ public class Model implements Repository.RepoListener {
     }
 
     public void detachPresenter(Model.DataChangeListener thatPresenter) {
-        presenters.remove(thatPresenter);
+        try {
+            tryDetachPresenter(thatPresenter);
+        } catch (InvalidPresenterStateException e) {
+            e.printStackTrace();
+            // log error
+        }
+    }
+
+    private void tryDetachPresenter(Model.DataChangeListener thatPresenter) throws InvalidPresenterStateException {
+        boolean success = presenters.remove(thatPresenter);
+        if (!success) {
+            throw new InvalidPresenterStateException(thatPresenter.getClass().getName());
+        }
     }
 
     public void setCurrentPerson(String name) throws NoPersonDataException {

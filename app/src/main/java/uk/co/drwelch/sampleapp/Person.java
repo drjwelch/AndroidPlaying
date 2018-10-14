@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public class Person {
 
     private String name;
-    private String height_m;
+    private String height_cm;
     private String mass_kg;
     private String createdAt;
     public static final String[] PROPERTIES = {"Name:", "Height:", "Mass:", "Created:"};
 
-    public Person(String name, String height_m, String mass_kg, String createdAt) {
+    public Person(String name, String height_cm, String mass_kg, String createdAt) {
         this.name = name;
-        this.height_m = height_m;
+        this.height_cm = height_cm;
         this.mass_kg = mass_kg;
         this.createdAt = createdAt;
     }
@@ -40,11 +40,11 @@ public class Person {
     private String getHeightFormatted() {
         String result;
         try {
-            float height = (float) Integer.parseInt(height_m) / 100;
+            float height = (float) Integer.parseInt(height_cm) / 100;
             // can't easily get locale for number format - need Context #sadface
             result = String.format ("%.2f", height) + " m";
         } catch (NumberFormatException  e) {
-            result = height_m;
+            result = height_cm;
         }
         return result;
     }

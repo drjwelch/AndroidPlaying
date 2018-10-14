@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -66,7 +65,6 @@ class Repository {
 
         // Parse each element into Person object
         boolean success;
-        String[] temp;
         JSONObject p = null;
 
         for (int i=0; i<personsJArray.length(); i++) {
@@ -81,7 +79,6 @@ class Repository {
             if (success) {
                 try {
                     Person currentPerson = new Person(p.getString(KEYS[0]),
-//                            personID,
                             p.getString(KEYS[1]),
                             p.getString(KEYS[2]),
                             p.getString(KEYS[3]));
