@@ -1,93 +1,65 @@
 package uk.co.drwelch.sampleapp;
 
-import java.util.ArrayList;
-
 public class MainActivityPresenter implements Model.Presenter {
 
     private Model model;
     private View view;
-
-    public void handleIncomingChoice(String name) {
-        setPersonIDfromName(name);
-        fetchClicked();
-    }
-
-    public String getIncomingExtraKey() {
-        return AppStrings.PERSONID;
-    }
 
     public MainActivityPresenter() {
         this.model = Model.getInstance();
         model.attachPresenter(this);
     }
 
+    public String getOutgoingExtraKey() {
+        return AppStrings.PERSONID;
+    }
+
     public void attachView(View view) {
         this.view = view;
-        view.setFieldLabels(model.getFieldLabels());
+        model.refreshData("");
+//        view.setData(model.getAllNames());
+//        view.setFieldLabels(model.getFieldLabels());
         updateView();
     }
 
-    public void detachView() {
+    public void detachView(boolean isComingBack) {
         this.view = null;
-    }
-
-    public void fetchClicked() {
-        view.hideSoftKeyboard();
-        String value = view.getEntryValue();
-        if (!value.isEmpty()) {
-            view.hideErrorText();
-            view.showSpinner();
-            model.refreshData(value);
-        } else {
-            view.showErrorText();
-        }
-        try {
-            model.setCurrentPerson(value);
-        } catch (NoPersonDataException e) {
-            view.showErrorText();
+        if (!isComingBack) {
+            model.detachPresenter(this);
         }
     }
 
-    public void setPersonIDfromName(String value) {
-        view.setEntryValue(value);
-    }
+    public void itemClicked(String value) {
+        view.startDetailViewWith(value);
 
-    public ArrayList<String> setTopFieldOnly(String error) {
-        ArrayList<String> fields;
-        fields = new ArrayList<String>();
-        fields.add(error);
-        for (int i=1;i<model.getFieldLabels().size();i++) {
-            fields.add("");
-        }
-        return fields;
-    }
+//        Toast.makeText(ctx, value, Toast.LENGTH_LONG).show();
 
-    public void onModelError(String message) {
-        view.hideSpinner();
-        ArrayList<String> fields = setTopFieldOnly(message);
-        view.setFieldValues(fields);
+//        String value = view.getItemValue();
+//        if (!value.isEmpty()) {
+//            view.hideErrorText();
+//            view.showSpinner();
+//            model.refreshData(value);
+//        } else {
+//            view.showErrorText();
+//        }
     }
 
     public void updateView() {
-        view.hideSpinner();
-        ArrayList<String> fields;
+//        view.hideSpinner();
         try {
-            fields = model.getFieldsFromObject();
+            view.setData(model.getAllNames());
         } catch (NoPersonDataException e) {
-            fields = setTopFieldOnly(e.getMessage());
+            view.setData(new String[] {AppStrings.NO_DATA});
         }
-        view.setFieldValues(fields);
+//        view.setFieldValues(model.getFieldsFromObject());
+    }
+
+    public void onModelError(String message) {
+        view.setData(new String[] {message});
     }
 
     public interface View {
-        void setFieldValues(ArrayList<String> values);
-        void setFieldLabels(ArrayList<String> labels);
-        void showSpinner();
-        void hideSpinner();
-        void showErrorText();
-        void hideErrorText();
-        void hideSoftKeyboard();
-        String getEntryValue();
-        void setEntryValue(String value);
+        void setData(String[] data);
+        void startDetailViewWith(String value);
     }
 }

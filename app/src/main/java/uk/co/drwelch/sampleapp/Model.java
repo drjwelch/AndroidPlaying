@@ -44,6 +44,13 @@ public class Model implements Repository.RepoListener {
     }
 
     public void attachPresenter(Model.Presenter newPresenter) {
+        // if user navigates back, a new presenter is created while the old one persists
+        // so detach the old one (TODO and destroy its object)
+        for (Model.Presenter p:presenters) {
+            if (p.getClass() == newPresenter.getClass() && p!=newPresenter) {
+                detachPresenter(p);
+            }
+        }
         presenters.add(newPresenter);
     }
 
@@ -119,7 +126,7 @@ public class Model implements Repository.RepoListener {
         });
     }
 
-    public void sendError(String message) {
+    private void sendError(String message) {
         for (Model.Presenter p:presenters) {
             p.onModelError(message);
         }

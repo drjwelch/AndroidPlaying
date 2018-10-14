@@ -3,37 +3,47 @@ package uk.co.drwelch.sampleapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ProgressBar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MainActivityPresenter.View {
 
+    private RecyclerView mRecyclerView;
     private MainActivityPresenter presenter;
+    private boolean isComingBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_person_list);
+        createRecyclerView();
+        isComingBack = false;
         attachPresenter();
-        // see what user clicked on to arrive here
-        Intent intent = getIntent();
-        if (intent != null) {
-            presenter.handleIncomingChoice(intent.getStringExtra(presenter.getIncomingExtraKey()));
-        }
+    }
+
+    private void createRecyclerView() {
+        // recycler view itself
+        mRecyclerView = findViewById(R.id.personListRecycler);
+        mRecyclerView.setHasFixedSize(true); // gives a performance improvement
+        // recycler view's layout manager
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
     protected void onDestroy() {
-        presenter.detachView();
+        presenter.detachView(this.isComingBack);
         super.onDestroy();
     }
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
+        this.isComingBack = true;
         return presenter;
     }
 
@@ -45,69 +55,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
         presenter.attachView(this);
     }
 
-    public void fetchButtonClicked(View view) {
+    // PersonListActivityPresenter.View interface
 
-        Intent intent = new Intent(this, PersonListActivity.class);
-        startActivity(intent);
-
-        //        presenter.fetchClicked();
-    }
-
-    // MainActivityPresenter.View interface
-
-    public String getEntryValue() {
-        TextView myInput = findViewById(R.id.inputField);
-        return myInput.getText().toString();
-    }
-
-    public void setEntryValue(String value) {
-        TextView myInput = findViewById(R.id.inputField);
-        myInput.setText(value);
-    }
-
-    public void setFieldLabels(ArrayList<String> labels) {
-        ((TextView) findViewById(R.id.field0Label)).setText(labels.get(0));
-        ((TextView) findViewById(R.id.field1Label)).setText(labels.get(1));
-        ((TextView) findViewById(R.id.field2Label)).setText(labels.get(2));
-        ((TextView) findViewById(R.id.field3Label)).setText(labels.get(3));
-    }
-
-    public void setFieldValues(ArrayList<String> values) {
-        ((TextView) findViewById(R.id.field0TextView)).setText(values.get(0));
-        ((TextView) findViewById(R.id.field1TextView)).setText(values.get(1));
-        ((TextView) findViewById(R.id.field2TextView)).setText(values.get(2));
-        ((TextView) findViewById(R.id.field3TextView)).setText(values.get(3));
-    }
-
-    public void showSpinner() {
-        ProgressBar spinner = findViewById(R.id.spinner);
-        spinner.setVisibility(View.VISIBLE);
-    }
-
-    public void hideSpinner() {
-        ProgressBar spinner = findViewById(R.id.spinner);
-        spinner.setVisibility(View.GONE);
-    }
-
-    public void showErrorText() {
-        TextView errorText = findViewById(R.id.errorLabel);
-        errorText.setVisibility(View.VISIBLE);
-    }
-
-    public void hideErrorText() {
-        TextView errorText = findViewById(R.id.errorLabel);
-        errorText.setVisibility(View.GONE);
-    }
-
-    public void hideSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        try {
-            if (imm.isAcceptingText()) { // verify if the soft keyboard is open
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    public void setData(String[] data) {
+        // recycler view's data adapter
+        RecyclerView.Adapter mAdapter = new PersonListAdapter(data, new PersonListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String item) { // click handler for items in the layout
+                presenter.itemClicked(item);
             }
-        } catch (NullPointerException e) {
-            // wasn't open or focused - meh
-        }
+        });
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public void startDetailViewWith(String value) {
+        Intent intent = new Intent(this, DetailViewActivity.class);
+        intent.putExtra(presenter.getOutgoingExtraKey(), value);
+        startActivity(intent);
     }
 }
+
 
