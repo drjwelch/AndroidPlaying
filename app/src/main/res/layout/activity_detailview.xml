@@ -31,7 +31,7 @@
         android:layout_marginStart="8dp"
         android:ems="10"
         android:gravity="start|center_vertical"
-        android:inputType="number"
+        android:inputType="text"
         android:textColor="@color/colorFieldValue"
         app:layout_constraintBaseline_toBaselineOf="@+id/inputPrompt"
         app:layout_constraintEnd_toStartOf="@+id/button"

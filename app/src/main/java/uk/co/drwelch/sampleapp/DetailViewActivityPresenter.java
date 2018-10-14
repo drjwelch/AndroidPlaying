@@ -2,13 +2,13 @@ package uk.co.drwelch.sampleapp;
 
 import java.util.ArrayList;
 
-public class DetailViewActivityPresenter implements Model.Presenter {
+public class DetailViewActivityPresenter implements Model.DataChangeListener {
 
     private Model model;
     private View view;
 
     public void handleIncomingChoice(String name) {
-        setPersonIDfromName(name);
+        setCurrentPerson(name);
         fetchClicked();
     }
 
@@ -40,26 +40,27 @@ public class DetailViewActivityPresenter implements Model.Presenter {
         if (!value.isEmpty()) {
             view.hideErrorText();
             view.showSpinner();
-            model.refreshData(value);
-        } else {
+            model.refreshData();
+            try {
+                model.setCurrentPerson(value);
+            } catch (NoPersonDataException e) {
+                view.setErrorMessage(e.getMessage());
+                view.showErrorText();
+            }
+        } else { // empty field
+            view.setErrorMessage(AppStrings.NONE_SELECTED);
             view.showErrorText();
         }
-        try {
-            model.setCurrentPerson(value);
-        } catch (NoPersonDataException e) {
-            view.showErrorText();
-        }
-    }
+}
 
-    private void setPersonIDfromName(String value) {
+    private void setCurrentPerson(String value) {
         view.setEntryValue(value);
     }
 
-    private ArrayList<String> setTopFieldOnly(String error) {
+    private ArrayList<String> setEmpty() {
         ArrayList<String> fields;
         fields = new ArrayList<>();
-        fields.add(error);
-        for (int i=1;i<model.getFieldLabels().size();i++) {
+        for (int i=0;i<model.getFieldLabels().size();i++) {
             fields.add("");
         }
         return fields;
@@ -73,12 +74,14 @@ public class DetailViewActivityPresenter implements Model.Presenter {
             try {
                 fields = model.getFieldsFromObject();
             } catch (NoPersonDataException e) {
-                fields = setTopFieldOnly(e.getMessage());
+                fields = setEmpty();
+                view.setErrorMessage(e.getMessage());
                 view.showErrorText();
             }
             view.setFieldValues(fields);
         } else {
-            fields = setTopFieldOnly(message);
+            fields = setEmpty();
+            view.setErrorMessage(message);
             view.setFieldValues(fields);
             view.showErrorText();
         }
@@ -91,6 +94,7 @@ public class DetailViewActivityPresenter implements Model.Presenter {
         void hideSpinner();
         void showErrorText();
         void hideErrorText();
+        void setErrorMessage(String err);
         void hideSoftKeyboard();
         String getEntryValue();
         void setEntryValue(String value);

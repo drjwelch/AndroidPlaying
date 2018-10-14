@@ -13,13 +13,13 @@ public class Model implements Repository.RepoListener {
     private String currentPersonName;
     private boolean dataLoaded;
     private Person[] allPeople;
-    private ArrayList<Model.Presenter> presenters = new ArrayList<>();
+    private ArrayList<Model.DataChangeListener> presenters = new ArrayList<>();
     private Repository repo;
 //    private String errorMessage;
-    private static final ArrayList<String> fieldKeys = new ArrayList<>();
-    private static final int INVALID = -1;
-    private static final int DEFAULT_PERSON = 0;
-    private static Model myInstance = null;
+//    private static final ArrayList<String> fieldKeys = new ArrayList<>();
+//   private static final int INVALID = -1;
+//    private static final int DEFAULT_PERSON = 0;
+    private static Model modelInstance = null;
 
     private Model() {
         repo = Repository.getInstance();
@@ -37,16 +37,18 @@ public class Model implements Repository.RepoListener {
 //    }
 //
     public static synchronized Model getInstance() {  // sync to prevent re-entrant
-        if (myInstance == null) {
-            myInstance = new Model();
+        if (modelInstance == null) {
+            modelInstance = new Model();
         }
-        return myInstance;
+        return modelInstance;
     }
 
-    public void attachPresenter(Model.Presenter newPresenter) {
-        // if user navigates back, a new presenter is created while the old one persists
-        // so detach the old one (TODO and destroy its object)
-        for (Model.Presenter p:presenters) {
+    public void attachPresenter(Model.DataChangeListener newPresenter) {
+        // Retain only one listener/presenter of each class
+        // On BACK, View does not re-establish connection to its presenter
+        // so the presenter has to go, which means releasing all references to it
+        // so that Java garbage-collects it
+        for (Model.DataChangeListener p:presenters) {
             if (p.getClass() == newPresenter.getClass() && p!=newPresenter) {
                 detachPresenter(p);
             }
@@ -54,7 +56,7 @@ public class Model implements Repository.RepoListener {
         presenters.add(newPresenter);
     }
 
-    public void detachPresenter(Model.Presenter thatPresenter) {
+    public void detachPresenter(Model.DataChangeListener thatPresenter) {
         presenters.remove(thatPresenter);
     }
 
@@ -70,8 +72,7 @@ public class Model implements Repository.RepoListener {
         }
     }
 
-    // TODO Keeping command for now ...
-    public void refreshData(String command) {
+    public void refreshData() {
         repo.fetch(this);
     }
 
@@ -107,11 +108,11 @@ public class Model implements Repository.RepoListener {
             throw new NoPersonDataException(AppStrings.NOT_LOADED);
         }
         for (Person person : allPeople) {
-            if (person.getName().equals(currentPersonName)) {
+            if (person.getName().equalsIgnoreCase(currentPersonName)) {
                 return person.getProperties();
             }
         }
-        throw new NoPersonDataException(AppStrings.NONE_SELECTED);
+        throw new NoPersonDataException(AppStrings.NOT_FOUND);
     }
 
     private void initViewUpdate(final String msg) {
@@ -119,7 +120,7 @@ public class Model implements Repository.RepoListener {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                for (Model.Presenter p:presenters) {
+                for (Model.DataChangeListener p:presenters) {
                     p.updateView(msg);
                 }
             }
@@ -158,7 +159,7 @@ public class Model implements Repository.RepoListener {
         initViewUpdate(res);
     }
 
-    public interface Presenter {
+    public interface DataChangeListener {
         void updateView(String message);
     }
 }

@@ -57,17 +57,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
     }
 
 
-    // PersonListActivityPresenter.View interface
+    // MainActivityPresenter.View interface
 
     public void setData(String[] data) {
         // recycler view's data adapter
-        RecyclerView.Adapter mAdapter = new PersonListAdapter(data, new PersonListAdapter.OnItemClickListener() {
+        RecyclerView.Adapter recyclerListAdapter = new MainActivityRecyclerListAdapter(data, new MainActivityRecyclerListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String item) { // click handler for items in the layout
                 presenter.itemClicked(item);
             }
         });
-        recycler.setAdapter(mAdapter);
+        recycler.setAdapter(recyclerListAdapter);
     }
 
     public void startDetailViewWith(String value) {

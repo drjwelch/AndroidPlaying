@@ -54,7 +54,7 @@ public class DetailViewActivity extends AppCompatActivity implements DetailViewA
         presenter.fetchClicked();
     }
 
-    // MainActivityPresenter.View interface
+    // DetailViewActivityPresenter.View interface
 
     public String getEntryValue() {
         TextView myInput = findViewById(R.id.inputField);
@@ -98,6 +98,11 @@ public class DetailViewActivity extends AppCompatActivity implements DetailViewA
     public void hideErrorText() {
         TextView errorText = findViewById(R.id.errorLabel);
         errorText.setVisibility(View.GONE);
+    }
+
+    public void setErrorMessage(String err) {
+        TextView errorText = findViewById(R.id.errorLabel);
+        errorText.setText(err);
     }
 
     public void hideSoftKeyboard() {

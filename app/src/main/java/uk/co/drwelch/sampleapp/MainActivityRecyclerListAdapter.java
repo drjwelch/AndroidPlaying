@@ -7,19 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.MyViewHolder> {
+public class MainActivityRecyclerListAdapter extends RecyclerView.Adapter<MainActivityRecyclerListAdapter.MyViewHolder> {
 
     // Interface for methods required to be implemented by the object listening to interactions with widgets in the viewholder
     public interface OnItemClickListener {
         void onItemClick(String item);
     }
 
-    private final String[] mDataset; // TODO change to Person[]
+    private final String[] arrayOfNames;
     private final OnItemClickListener listener;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PersonListAdapter(String[] myDataset, OnItemClickListener mylistener) {
-        this.mDataset = myDataset;
+    public MainActivityRecyclerListAdapter(String[] myDataset, OnItemClickListener mylistener) {
+        this.arrayOfNames = myDataset;
         this.listener = mylistener;
     }
 
@@ -37,13 +37,13 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         // put data into the widget and add interaction
-        holder.bind(mDataset[position], listener);
+        holder.bind(arrayOfNames[position], listener);
     }
 
     // Return the size of dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return arrayOfNames.length;
     }
 
     // NOW THE INTERNAL CLASS FOR VIEWHOLDER
@@ -52,17 +52,17 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.My
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         // each data item is just a string in this case, shown in a TextView
-        public TextView mTextView;
+        public TextView nameField;
 
         public MyViewHolder(View v) {
             super(v);
-            mTextView = v.findViewById(R.id.personTextView);
+            nameField = v.findViewById(R.id.personTextView);
         }
 
         // requested by the layout manager via the Adapter to instantiate rows in the recyclerview
         public void bind(final String item, final OnItemClickListener listener) {
-            mTextView.setText(item);
-            mTextView.setOnClickListener(new View.OnClickListener() {
+            nameField.setText(item);
+            nameField.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(item);
